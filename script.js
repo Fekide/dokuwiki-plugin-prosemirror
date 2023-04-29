@@ -25,7 +25,7 @@ function showProsemirror(json) {
         disableNativeFirefoxTableControls();
     } catch (e) {
         console.error(e);
-        let message = 'There was an error in the WYSIWYG editor. You will be redirected to the syntax editor in 5 seconds.';
+        let message = 'There was an error in the WYSIWYG editor. Please cancel and try again.';
         if (window.SentryPlugin) {
             SentryPlugin.logSentryException(e, {
                 tags: {
@@ -40,9 +40,6 @@ function showProsemirror(json) {
             message += ' -- The error has been logged to Sentry.';
         }
         showErrorMessage(message);
-        setTimeout(() => {
-            jQuery('.plugin_prosemirror_useWYSIWYG').click();
-        }, 5000);
     }
     window.proseMirrorIsActive = true;
     $textArea.hide();
