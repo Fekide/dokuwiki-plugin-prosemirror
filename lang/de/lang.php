@@ -6,7 +6,7 @@
  */
 
 // custom language strings for the plugin
-$lang['switch_editors'] = 'Syntax &#11020; Visueller Editor umschalten';
+$lang['switch_editors'] = 'Visueller Editor &#11020; Syntax Editor wechseln';
 
 $lang['link target'] = 'Linkziel';
 $lang['type:wiki page'] = 'Eine Seite in diesem Wiki';
