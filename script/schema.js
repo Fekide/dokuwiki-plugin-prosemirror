@@ -59,10 +59,10 @@ export default function getSpec() {
     const tableNode = nodes.get('table');
     tableNode.toDOM = function toDOM() {
         return [
-            "div",
-            { class: "table-responsive" },
-            ["table", { class: "table table-striped table-bordered" }, ["tbody", 0]],
-        ]
+            'div',
+            { class: 'table-responsive' },
+            ['table', { class: 'table table-striped table-bordered' }, ['tbody', 0]],
+        ];
     };
     nodes.update('table', tableNode);
 
