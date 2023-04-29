@@ -6,7 +6,7 @@
 function showDefaultEditor(text) {
     window.Prosemirror.destroyProsemirror();
     window.proseMirrorIsActive = false;
-    dw_locktimer.init(dw_locktimer.timeout/1000, dw_locktimer.draft);
+    dw_locktimer.init(dw_locktimer.timeout / 1000, dw_locktimer.draft);
     jQuery('#wiki__text').val(text).show();
     jQuery('#size__ctl').show();
     jQuery('.editBox > .toolbar').show();
@@ -30,17 +30,17 @@ function showProsemirror(json) {
             SentryPlugin.logSentryException(e, {
                 tags: {
                     plugin: 'prosemirror',
-                    'id': JSINFO.id,
+                    id: JSINFO.id,
                 },
                 extra: {
-                    'content': $textArea.val(),
-                    'json': $prosemirrorJsonInput.val(),
-                }
+                    content: $textArea.val(),
+                    json: $prosemirrorJsonInput.val(),
+                },
             });
             message += ' -- The error has been logged to Sentry.';
         }
         showErrorMessage(message);
-        setTimeout(function() {
+        setTimeout(() => {
             jQuery('.plugin_prosemirror_useWYSIWYG').click();
         }, 5000);
     }
@@ -52,10 +52,10 @@ function showProsemirror(json) {
 
     if (dw_locktimer.addField) {
         // todo remove this guard after the next stable DokuWiki release after Greebo
-        dw_locktimer.init(dw_locktimer.timeout/1000, dw_locktimer.draft, 'prosemirror__editor');
+        dw_locktimer.init(dw_locktimer.timeout / 1000, dw_locktimer.draft, 'prosemirror__editor');
         dw_locktimer.addField('input[name=prosemirror_json]');
     } else {
-        console.warn('Draft saving in WYSIWYG is not available. Please upgrade your wiki to the current development snapshot.')
+        console.warn('Draft saving in WYSIWYG is not available. Please upgrade your wiki to the current development snapshot.');
     }
 }
 
@@ -65,8 +65,8 @@ function showProsemirror(json) {
  * See https://github.com/ProseMirror/prosemirror/issues/432 and https://github.com/ProseMirror/prosemirror-tables/issues/22
  */
 function disableNativeFirefoxTableControls() {
-    document.execCommand("enableObjectResizing", false, "false");
-    document.execCommand("enableInlineTableEditing", false, "false");
+    document.execCommand('enableObjectResizing', false, 'false');
+    document.execCommand('enableInlineTableEditing', false, 'false');
 }
 
 /**
@@ -85,11 +85,11 @@ function initializeProsemirror() {
             SentryPlugin.logSentryException(e, {
                 tags: {
                     plugin: 'prosemirror',
-                    'id': JSINFO.id,
+                    id: JSINFO.id,
                 },
                 extra: {
-                    'content': $textArea.val(),
-                }
+                    content: $textArea.val(),
+                },
             });
             message += ' The error has been logged to sentry.';
         }
@@ -107,7 +107,7 @@ function initializeProsemirror() {
  */
 function showErrorMessage(errorMsg) {
     jQuery('.editBox').before(
-        jQuery('<div class="error"></div>').text(errorMsg)
+        jQuery('<div class="error"></div>').text(errorMsg),
     );
 }
 
@@ -117,17 +117,17 @@ function showErrorMessage(errorMsg) {
 function toggleEditor() {
     const $textArea = jQuery('#wiki__text');
     const $jsonField = jQuery('#dw__editform').find('[name=prosemirror_json]');
-    jQuery.post(DOKU_BASE + 'lib/exe/ajax.php', {
+    jQuery.post(`${DOKU_BASE}lib/exe/ajax.php`, {
         call: 'plugin_prosemirror_switch_editors',
         data: window.proseMirrorIsActive ? $jsonField.val() : $textArea.val(),
         getJSON: window.proseMirrorIsActive ? '0' : '1',
-    }).done(function handleSwitchEditorResponse(data) {
+    }).done((data) => {
         if (window.proseMirrorIsActive) {
             showDefaultEditor(data.text);
         } else {
             showProsemirror(data.json);
         }
-    }).fail(function (jqXHR, textStatus, errorThrown) {
+    }).fail((jqXHR, textStatus, errorThrown) => {
         console.error(jqXHR, textStatus, errorThrown); // FIXME: proper error handling
         if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
             showErrorMessage(jqXHR.responseJSON.error);
@@ -137,13 +137,13 @@ function toggleEditor() {
                 SentryPlugin.logSentryException(new Error(textStatus), {
                     tags: {
                         plugin: 'prosemirror',
-                        'id': JSINFO.id,
-                        status: jqXHR.status
+                        id: JSINFO.id,
+                        status: jqXHR.status,
                     },
                     extra: {
-                        'content': $textArea.val(),
-                        'responseText': jqXHR.responseText,
-                    }
+                        content: $textArea.val(),
+                        responseText: jqXHR.responseText,
+                    },
                 });
                 message += ' -- The error has been logged to Sentry.';
             }
@@ -160,14 +160,13 @@ function toggleEditor() {
  */
 function handleEditSession() {
     const $jsonField = jQuery('#dw__editform').find('[name=prosemirror_json]');
-    if (DokuCookie.getValue('plugin_prosemirror_useWYSIWYG')) {
-        showProsemirror($jsonField.val());
-    }
+    showProsemirror($jsonField.val());
+
     const $toggleEditorButton = jQuery('.plugin_prosemirror_useWYSIWYG');
     $toggleEditorButton.on('click', toggleEditor);
 }
 
-jQuery(function () {
+jQuery(() => {
     initializeProsemirror();
     window.proseMirrorIsActive = false;
 
@@ -175,7 +174,7 @@ jQuery(function () {
         handleEditSession();
     }
 
-    jQuery(window).on('fastwiki:afterSwitch', function(evt, viewMode, isSectionEdit, prevViewMode) {
+    jQuery(window).on('fastwiki:afterSwitch', (evt, viewMode, isSectionEdit, prevViewMode) => {
         if (viewMode === 'edit' || isSectionEdit) {
             handleEditSession();
         }
