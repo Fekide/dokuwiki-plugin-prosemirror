@@ -157,8 +157,9 @@ function toggleEditor() {
  */
 function handleEditSession() {
     const $jsonField = jQuery('#dw__editform').find('[name=prosemirror_json]');
-    showProsemirror($jsonField.val());
-
+    if (DokuCookie.getValue('plugin_prosemirror_useWYSIWYG')) {
+        showProsemirror($jsonField.val());
+    }
     const $toggleEditorButton = jQuery('.plugin_prosemirror_useWYSIWYG');
     $toggleEditorButton.on('click', toggleEditor);
 }

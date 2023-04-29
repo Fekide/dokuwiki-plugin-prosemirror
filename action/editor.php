@@ -41,9 +41,7 @@ class action_plugin_prosemirror_editor extends DokuWiki_Action_Plugin
      */
     public function forceWYSIWYG(Doku_Event $event, $param)
     {
-        if ($this->isForceWYSIWYG()) {
-            set_doku_pref('plugin_prosemirror_useWYSIWYG', true);
-        }
+        set_doku_pref('plugin_prosemirror_useWYSIWYG', true);
     }
 
     /**
@@ -78,7 +76,7 @@ class action_plugin_prosemirror_editor extends DokuWiki_Action_Plugin
             $prosemirrorJSON = p_render('prosemirror', $instructions, $info);
         } catch (Throwable $e) {
             $errorMsg = 'Rendering the page\'s syntax for the WYSIWYG editor failed: ' . $e->getMessage();
-            
+
             /** @var \helper_plugin_prosemirror $helper */
             $helper = plugin_load('helper', 'prosemirror');
             if ($helper->tryToLogErrorToSentry($e, ['text' => $TEXT])) {
