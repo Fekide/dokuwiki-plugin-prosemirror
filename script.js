@@ -9,7 +9,7 @@ function showDefaultEditor(text) {
     dw_locktimer.init(dw_locktimer.timeout / 1000, dw_locktimer.draft);
     jQuery('#wiki__text').val(text).show();
     jQuery('#size__ctl').show();
-    jQuery('.editBox > .toolbar').show();
+    jQuery('.editBox > .toolbar').css('visibility', 'visible');
 }
 
 /**
@@ -44,7 +44,7 @@ function showProsemirror(json) {
     window.proseMirrorIsActive = true;
     $textArea.hide();
     jQuery('#size__ctl').hide();
-    jQuery('.editBox > .toolbar').hide();
+    jQuery('.editBox > .toolbar').css('visibility', 'hidden');
     jQuery('div.ProseMirror').focus();
 
     if (dw_locktimer.addField) {

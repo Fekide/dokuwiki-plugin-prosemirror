@@ -70,27 +70,25 @@ class action_plugin_prosemirror_editor extends DokuWiki_Action_Plugin
         if ($this->isReadOnly($form)) return;
 
 
-        $useWYSIWYG = get_doku_pref('plugin_prosemirror_useWYSIWYG', false);
-
         $prosemirrorJSON = '';
-        if ($useWYSIWYG) {
-            global $TEXT;
-            $instructions = p_get_instructions($TEXT);
-            try {
-                $prosemirrorJSON = p_render('prosemirror', $instructions, $info);
-            } catch (Throwable $e) {
-                $errorMsg = 'Rendering the page\'s syntax for the WYSIWYG editor failed: ' . $e->getMessage();
-
-                /** @var \helper_plugin_prosemirror $helper */
-                $helper = plugin_load('helper', 'prosemirror');
-                if ($helper->tryToLogErrorToSentry($e, ['text' => $TEXT])) {
-                    $errorMsg .= ' -- The error has been logged to Sentry.';
-                }
-
-                msg($errorMsg, -1);
-                return;
+        
+        global $TEXT;
+        $instructions = p_get_instructions($TEXT);
+        try {
+            $prosemirrorJSON = p_render('prosemirror', $instructions, $info);
+        } catch (Throwable $e) {
+            $errorMsg = 'Rendering the page\'s syntax for the WYSIWYG editor failed: ' . $e->getMessage();
+            
+            /** @var \helper_plugin_prosemirror $helper */
+            $helper = plugin_load('helper', 'prosemirror');
+            if ($helper->tryToLogErrorToSentry($e, ['text' => $TEXT])) {
+                $errorMsg .= ' -- The error has been logged to Sentry.';
             }
+             
+            msg($errorMsg, -1);
+            return;
         }
+        
 
         if (is_a($form, \dokuwiki\Form\Form::class)) {
             $form->addElement($this->buildToggleButton(), 0);
